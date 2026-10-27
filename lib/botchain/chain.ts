@@ -117,7 +117,7 @@ export function faucetUrl(chainId: number): string | null {
 export const BOTCHAIN_SITE_URL = "https://botchain.ai";
 export const BOTCHAIN_EXPLORER_URL = "https://scan.botchain.ai";
 
-import { isDeployed, getDeployment } from "./deployment";
+import { isDeployed, getDeployment } from "./deployment.ts";
 
 export type FooterLinks = {
   contract: string | null;
