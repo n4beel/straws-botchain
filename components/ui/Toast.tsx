@@ -12,11 +12,21 @@ interface ToastItem {
   description?: string;
 }
 
-interface ToastContextValue {
-  toast: (type: ToastType, title: string, description?: string) => void;
+export interface ToastOptions {
+  type?: ToastType;
+  title: string;
+  description?: string;
 }
 
-const ToastContext = createContext<ToastContextValue>({ toast: () => {} });
+interface ToastContextValue {
+  toast: (type: ToastType, title: string, description?: string) => void;
+  show: (options: ToastOptions) => void;
+}
+
+const ToastContext = createContext<ToastContextValue>({
+  toast: () => {},
+  show: () => {},
+});
 
 export function useToast() {
   return useContext(ToastContext);
@@ -40,8 +50,15 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     }, 4000);
   }, []);
 
+  const show = useCallback(
+    ({ type = "info", title, description }: ToastOptions) => {
+      toast(type, title, description);
+    },
+    [toast],
+  );
+
   return (
-    <ToastContext.Provider value={{ toast }}>
+    <ToastContext.Provider value={{ toast, show }}>
       <RadixToast.Provider swipeDirection="right">
         {children}
         {toasts.map((t) => (

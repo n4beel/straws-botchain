@@ -197,6 +197,18 @@ let memoryStore: StoredSecret[] = [];
 /**
  * LocalStorage manager for participant secrets with backup export/import.
  */
+export function isStorageAvailable(): boolean {
+  try {
+    if (typeof window === "undefined" || !window.localStorage) return false;
+    const testKey = "__straws_storage_test__";
+    window.localStorage.setItem(testKey, "1");
+    window.localStorage.removeItem(testKey);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export const secretStore = {
   saveSecret(drawId: bigint | number, entrant: Address, secret: Hex): boolean {
     const normalizedEntrant = getAddress(entrant);

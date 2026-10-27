@@ -40,3 +40,5 @@ export function describeError(err: unknown): string {
 
   return message.length > 120 ? `${message.slice(0, 117)}...` : message;
 }
+
+export const describeContractError = describeError;
