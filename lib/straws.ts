@@ -77,14 +77,14 @@ export function newSecret(): Hex {
  * Derives the final random seed from revealed secrets in canonical join order.
  * Matches Straws.sol: keccak256(abi.encode(id, revealedSecrets))
  */
-export function seedFor(id: bigint | number, secrets: Hex[]): Hex {
+export function seedFor(id: bigint | number, secrets: readonly Hex[] | Hex[]): Hex {
   return keccak256(
     encodeAbiParameters(
       [
         { name: "id", type: "uint256" },
         { name: "secrets", type: "bytes32[]" },
       ],
-      [BigInt(id), secrets]
+      [BigInt(id), [...secrets]]
     )
   );
 }
@@ -95,7 +95,7 @@ export function seedFor(id: bigint | number, secrets: Hex[]): Hex {
  */
 export function winnerFrom(
   seed: Hex,
-  revealedAddresses: Address[]
+  revealedAddresses: readonly Address[] | Address[]
 ): Address | null {
   if (!revealedAddresses || revealedAddresses.length === 0) return null;
   const pos = Number(BigInt(seed) % BigInt(revealedAddresses.length));
