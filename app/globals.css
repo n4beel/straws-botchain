@@ -5,43 +5,49 @@
 @source "../lib/**/*.{ts,tsx}";
 
 @theme {
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-sans: var(--font-gabarito), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-martian), ui-monospace, monospace;
 
-  --radius: 2px;
-  --radius-sm: 2px;
-  --radius-md: 4px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --radius-full: 9999px;
 }
 
-/**
- * Design tokens.
- *
- * Every component reads these through `var(--token)` rather than a Tailwind colour class, which is
- * what lets a project change its whole palette from `lib/app-config.ts`: the root layout writes
- * `--accent` inline, overriding the default below. Nothing else needs editing per project.
- */
 :root {
-  --bg-base: #0A0A0A;
-  --bg-surface: #111111;
-  --bg-elevated: #181818;
-  --bg-overlay: #1F1F1F;
-  --border-subtle: #1E1E1E;
-  --border-default: #2A2A2A;
-  --border-strong: #383838;
-  --text-primary: #EBEBEB;
-  --text-secondary: #888888;
-  --text-tertiary: #555555;
-  --accent: #00E5CC;
-  --success: #1DB954;
-  --warning: #F5A623;
-  --danger: #E53E3E;
-  /* Wallet menu: opaque, contrast-checked (scripts/check-ui-contract.py). Redefine per project for ITS ground. */
-  --menu-bg: #181818;
-  --menu-fg: #EBEBEB;
-  --menu-muted: #A8A8A8;
-  --menu-border: #3A3A3A;
-  --menu-hover-bg: #262626;
-  --menu-danger: #FF8A8A;
+  /* Straws Archetype V: Warm Sand Ground & Rose Ink */
+  --bg-base: #EBD9B4;
+  --bg-surface: #F6EBD0;
+  --bg-elevated: #FFF8EA;
+  --bg-overlay: #F0DFC0;
+  --text-primary: #2B2118;
+  --text-secondary: #6B5A44;
+  --text-muted: #6B5A44;
+  --text-tertiary: #8C7860;
+  --accent: #D1495B;
+  --accent-ink: #FFFFFF;
+  --accent-hover: #BD384A;
+  --border-default: #BFA98A;
+  --border-subtle: #D9C79F;
+  --border-strong: #A89070;
+  --success: #2F7D4F;
+  --danger: #B3261E;
+  --warning: #8A5A00;
+
+  /* Wallet menu (opaque, contrast-verified against menu-bg #FFF8EA) */
+  --menu-bg: #FFF8EA;
+  --menu-fg: #2B2118;
+  --menu-muted: #5E4C3A;
+  --menu-border: #BFA98A;
+  --menu-hover-bg: #F2E3C4;
+  --menu-danger: #B3261E;
+
+  /* Straws physical palette */
+  --straw-hollow: #D9C79F;
+  --straw-joined: #7D6B56;
+  --straw-winner: #D1495B;
+  --straw-tag: #FFFDF7;
+  --straw-shadow: rgba(43, 33, 24, 0.12);
 }
 
 @layer base {
@@ -53,10 +59,11 @@
 
   html {
     height: 100%;
+    background-color: var(--bg-base);
   }
 
   body {
-    background: var(--bg-base);
+    background-color: var(--bg-base);
     color: var(--text-primary);
     font-family: var(--font-sans);
     min-height: 100%;
@@ -66,19 +73,10 @@
 
   a {
     color: inherit;
+    text-decoration: none;
   }
 }
 
-/* Touch targets
- *
- * The interface is deliberately dense, and at 26px tall a `size="sm"` button is comfortable with a
- * mouse and a coin-flip with a thumb. `pointer: coarse` matches touch input rather than screen
- * width, so this raises the hit area exactly where it is needed and leaves mouse density
- * untouched, including on a small laptop window.
- *
- * 44px is Apple's minimum; Android asks for 48dp. Padding rather than height, so a control that is
- * already large enough is not stretched.
- */
 @media (pointer: coarse) {
   button,
   [role="button"],
@@ -90,53 +88,91 @@
 
   input,
   textarea {
-    /* Anything under 16px makes iOS Safari zoom the page on focus, and it does not zoom back. */
     font-size: 16px;
   }
 }
 
-/* Nothing should be able to scroll the page sideways. A single overflowing address or hash
- * otherwise shifts the whole layout and there is no obvious culprit. */
 html,
 body {
   overflow-x: hidden;
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  background: color-mix(in srgb, var(--accent) 24%, transparent);
   color: var(--accent);
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   background: var(--bg-base);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border-strong);
-  border-radius: 2px;
+  background: var(--border-default);
+  border-radius: 9999px;
 }
 
 .mono {
   font-family: var(--font-mono);
-  letter-spacing: 0;
+  letter-spacing: -0.02em;
 }
 
-/* Toast entry. Radix drives the data-state; without the keyframes the toast simply appears. */
-@keyframes slideIn {
-  from { transform: translateX(8px); opacity: 0; }
-  to   { transform: translateX(0);   opacity: 1; }
+/* Straw Pull Animation (400ms duration) */
+@keyframes pullStrawKeyframe {
+  0% {
+    transform: translateY(0) scaleY(1);
+  }
+  60% {
+    transform: translateY(-48px) scaleY(1.12);
+  }
+  100% {
+    transform: translateY(-40px) scaleY(1.08);
+  }
 }
+
+.straw-pull-active {
+  animation: pullStrawKeyframe 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fanWiggle {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(1.5deg);
+  }
+}
+
+/* Toast animations */
+@keyframes slideIn {
+  from {
+    transform: translateX(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 @keyframes swipeOut {
-  to { transform: translateX(100%); opacity: 0; }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
 }
 
 @keyframes shimmer {
-  0%   { background-position: -400px 0; }
-  100% { background-position: 400px 0; }
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
 }
+
 .skeleton {
   background: linear-gradient(
     90deg,
@@ -146,7 +182,7 @@ body {
   );
   background-size: 800px 100%;
   animation: shimmer 1.6s ease-in-out infinite;
-  border-radius: 2px;
+  border-radius: 6px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -156,5 +192,10 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .straw-pull-active {
+    animation: none !important;
+    transform: translateY(-40px) scaleY(1.08) !important;
   }
 }
