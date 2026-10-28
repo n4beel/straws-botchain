@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useAccount, useWriteContract, usePublicClient } from "wagmi";
+import { useAccount, usePublicClient } from "wagmi";
+import { useWriteContract } from "@/lib/useChainWrite";
 import { strawsAbi } from "@/lib/botchain/abi";
 import { activeBotChain } from "@/lib/botchain/chain";
 import { getDeployment, isDeployed } from "@/lib/botchain/deployment";

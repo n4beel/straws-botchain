@@ -2,12 +2,8 @@
 
 import { use, useEffect, useState, useMemo } from "react";
 import Link from "next/link";
-import {
-  useAccount,
-  useReadContract,
-  useWriteContract,
-  usePublicClient,
-} from "wagmi";
+import { useAccount, useReadContract, usePublicClient } from "wagmi";
+import { useWriteContract } from "@/lib/useChainWrite";
 import { type Address, type Hex } from "viem";
 import { strawsAbi } from "@/lib/botchain/abi";
 import { activeBotChain } from "@/lib/botchain/chain";
