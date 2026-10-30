@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAccount, usePublicClient } from "wagmi";
-import { useWriteContract } from "@/lib/useChainWrite";
+import { useWriteContract, waitSuccess } from "@/lib/useChainWrite";
 import { strawsAbi } from "@/lib/botchain/abi";
 import { activeBotChain } from "@/lib/botchain/chain";
 import { getDeployment, isDeployed } from "@/lib/botchain/deployment";
@@ -93,7 +93,7 @@ export default function NewDrawPage() {
       });
 
       if (publicClient) {
-        const receipt = await publicClient.waitForTransactionReceipt({ hash });
+        const receipt = await waitSuccess(publicClient, hash);
         // Find Created event from logs
         let createdId: bigint | undefined;
         for (const log of receipt.logs) {

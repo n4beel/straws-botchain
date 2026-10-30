@@ -3,7 +3,7 @@
 import { use, useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { useAccount, useReadContract, usePublicClient } from "wagmi";
-import { useWriteContract } from "@/lib/useChainWrite";
+import { useWriteContract, waitSuccess } from "@/lib/useChainWrite";
 import { type Address, type Hex } from "viem";
 import { strawsAbi } from "@/lib/botchain/abi";
 import { activeBotChain } from "@/lib/botchain/chain";
@@ -259,7 +259,7 @@ export default function DrawPage({
       });
 
       if (publicClient) {
-        await publicClient.waitForTransactionReceipt({ hash });
+        await waitSuccess(publicClient, hash);
       }
 
       toast({
@@ -301,7 +301,7 @@ export default function DrawPage({
       });
 
       if (publicClient) {
-        await publicClient.waitForTransactionReceipt({ hash });
+        await waitSuccess(publicClient, hash);
       }
 
       toast({
@@ -343,7 +343,7 @@ export default function DrawPage({
       });
 
       if (publicClient) {
-        await publicClient.waitForTransactionReceipt({ hash });
+        await waitSuccess(publicClient, hash);
       }
 
       toast({
