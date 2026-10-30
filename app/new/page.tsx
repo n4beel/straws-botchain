@@ -42,7 +42,7 @@ const REVEAL_DURATIONS = [
 export default function NewDrawPage() {
   const router = useRouter();
   const { isConnected } = useAccount();
-  const publicClient = usePublicClient();
+  const publicClient = usePublicClient({ chainId: activeBotChain.id });
   const { show: toast } = useToast();
 
   const deployment = getDeployment(activeBotChain.id);

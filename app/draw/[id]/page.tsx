@@ -36,7 +36,7 @@ export default function DrawPage({
   const drawId = BigInt(params.id);
 
   const { address: userAddress, isConnected } = useAccount();
-  const publicClient = usePublicClient(); // stable-hook-result: wagmi memoises the client per config
+  const publicClient = usePublicClient({ chainId: activeBotChain.id }); // stable-hook-result: wagmi memoises the client per config
   const { show: toast } = useToast();
 
   const deployment = getDeployment(activeBotChain.id);
