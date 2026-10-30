@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Gabarito, Martian_Mono } from "next/font/google";
 import { EvmProvider } from "@/components/providers/EvmProvider";
 import { ToastProvider } from "@/components/ui/Toast";
+import WrongNetworkBar from "@/components/botchain/WrongNetworkBar";
 import PageShell from "@/components/layout/PageShell";
 import { app } from "@/lib/app-config";
 import "./globals.css";
@@ -51,6 +52,7 @@ export default function RootLayout({
       <body className="min-h-full antialiased bg-[#EBD9B4] text-[#2B2118]">
         <EvmProvider>
           <ToastProvider>
+            <WrongNetworkBar />
             <PageShell>{children}</PageShell>
           </ToastProvider>
         </EvmProvider>
